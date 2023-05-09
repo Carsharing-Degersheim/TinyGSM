@@ -416,7 +416,10 @@ class TinyGsmSim7000 : public TinyGsmSim70xx<TinyGsmSim7000>,
         TINY_GSM_YIELD();
         int8_t a = stream.read();
         if (a <= 0) continue;  // Skip 0x00 bytes, just in case
-        data += static_cast<char>(a);
+        if (!data.concat(static_cast<char>(a))) {
+          Serial.println("Out of memory.");
+          exit(EXIT_FAILURE);
+        }
         if (r1 && data.endsWith(r1)) {
           index = 1;
           goto finish;
