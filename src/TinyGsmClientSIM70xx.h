@@ -344,21 +344,6 @@ class TinyGsmSim70xx : public TinyGsmModem<TinyGsmSim70xx<modemType>>,
           ',');  // MSL Altitude. Unit is meters
       ispeed = thisModem().streamGetFloatBefore(
           ',');                          // Speed Over Ground. Unit is knots.
-      thisModem().streamSkipUntil(',');  // Course Over Ground. Degrees.
-      thisModem().streamSkipUntil(',');  // Fix Mode
-      thisModem().streamSkipUntil(',');  // Reserved1
-      iaccuracy = thisModem().streamGetFloatBefore(
-          ',');                          // Horizontal Dilution Of Precision
-      thisModem().streamSkipUntil(',');  // Position Dilution Of Precision
-      thisModem().streamSkipUntil(',');  // Vertical Dilution Of Precision
-      thisModem().streamSkipUntil(',');  // Reserved2
-      ivsat = thisModem().streamGetIntBefore(',');  // GNSS Satellites in View
-      iusat = thisModem().streamGetIntBefore(',');  // GNSS Satellites Used
-      thisModem().streamSkipUntil(',');             // GLONASS Satellites Used
-      thisModem().streamSkipUntil(',');             // Reserved3
-      thisModem().streamSkipUntil(',');             // C/N0 max
-      thisModem().streamSkipUntil(',');             // HPA
-      thisModem().streamSkipUntil('\n');            // VPA
 
       // Set pointers
       if (lat != NULL) *lat = ilat;
@@ -376,6 +361,7 @@ class TinyGsmSim70xx : public TinyGsmModem<TinyGsmSim70xx<modemType>>,
       if (minute != NULL) *minute = imin;
       if (second != NULL) *second = static_cast<int>(secondWithSS);
 
+      thisModem().streamSkipUntil('\n');
       thisModem().waitResponse();
       return true;
     }
